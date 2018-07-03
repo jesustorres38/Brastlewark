@@ -3,7 +3,8 @@ import { withRouter, Route, Switch, Redirect } from 'react-router-dom'
 
 import './App.css'
 import Home from '../Home/Home'
-import About from '../About/About'
+import Inhabitants from '../Inhabitants/Inhabitants'
+import Footer from '../Footer/Footer'
 import Header from '../Header/Header'
 
 
@@ -16,10 +17,12 @@ class App extends Component {
 
         <Switch>
             <Route exact path="/" component={Home}/>
-            <Route exact path="/about" component={About}/>
+            <Route exact path="/inhabitants" component={Inhabitants}/>
 
             <Redirect to='/' />
         </Switch>
+
+        <Footer/>
 
       </div>
     );
