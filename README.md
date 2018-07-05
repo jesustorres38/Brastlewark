@@ -9,3 +9,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 * Clone or download this repository
 * Run `npm install`
 * Run `npm start`  
+
+Or visit: 
+
+"https://brastlewark-app.herokuapp.com"
