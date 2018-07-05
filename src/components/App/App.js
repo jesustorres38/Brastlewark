@@ -31,6 +31,7 @@ class App extends Component {
   }
 
   componentDidMount(){
+    console.log("llamada");
     axios.get("https://raw.githubusercontent.com/rrafols/mobile_test/master/data.json")
       .then(response => {
         const infoInhabitants = response.data.Brastlewark.map(elemt => {

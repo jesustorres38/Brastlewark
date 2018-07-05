@@ -16,27 +16,32 @@ class Inhabitants extends Component {
 
     }
 
-    handleClick = () => {
+    handleClick = (e) => {
         const word = document.getElementById("input1").value;
         const term = word.charAt(0).toUpperCase()+word.toLowerCase().slice(1);
         const data = this.props.data;
 
-
-        this.setState({
-            data: data.filter(x => {
-            if (x.professions){
-                if(x.professions.indexOf(term)>-1){
-                    return x;
+        if(word === ''){
+            this.setState({data: data});
+        }
+        else{
+            this.setState({
+                data: data.filter(x => {
+                if (x.professions){
+                    if(x.professions.indexOf(term)>-1){
+                        return x;
+                    }
                 }
-            }
-            return false;
+                return false;
+                })
             })
-        })
+        }
     }
 
     render(){
 
         const data = this.state.data;
+
 
         return(
             <div>
@@ -44,7 +49,7 @@ class Inhabitants extends Component {
                     <section className="jumbotron text-center">
                     <div className="container">
                         <h1 className="jumbotron-heading">Find friends for new adventures</h1>
-                        <p className="lead text-muted">Find friends for new adventures filtering by professions like "Metalworker, Tinker or Baker".</p>
+                        <p className="lead text-muted">Find friends for new adventures filtering by professions like "Metalworker, Tailor or Baker".</p>
                         <div className="input-group mb-1">
                             <input type="text" className="form-control" placeholder="Profession" id="input1"/>
                             <div className="input-group-append">
@@ -57,7 +62,7 @@ class Inhabitants extends Component {
                 <div className="album py-2 bg-light">
                     <div className="container">
                         <div className="row">
-                            {data.map((x,i)=>{
+                            {data.length > 0 && data.map((x,i)=>{
                                 return (
                                     <div key={i} className="col-md-3">
                                         <div className="card mb-4 box-shadow">
@@ -74,7 +79,8 @@ class Inhabitants extends Component {
                                         </div>
                                     </div>)
                                 })
-                            } 
+                            }
+                            {data.length === 0 && <div>No results found...</div>} 
                         </div>
                     </div>
                 </div>
