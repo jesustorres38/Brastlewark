@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import axios from "axios"
-// import { Link } from 'react-router-dom'
+// import axios from "axios"
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
 
 import "./Inhabitants.css"
 
@@ -10,38 +11,32 @@ class Inhabitants extends Component {
         super(props);
     
         this.state = {
-          inhabitants: ''
+            data: props.data
         }
+
     }
 
-    componentDidMount(){
-        axios.get("https://raw.githubusercontent.com/rrafols/mobile_test/master/data.json")
-          .then(response => {
-            const infoInhabitants = response.data.Brastlewark.map(elemt => {
-              // console.log(elemt);
-              return {
-                id: elemt.id,
-                name: elemt.name,
-                age: elemt.age,
-                weight: elemt.weight,
-                height: elemt.height,
-                thumbnail: elemt.thumbnail,
-                hair: elemt.hair_color,
-                friends: elemt.friends,
-                professions: elemt.professions
-              };
+    handleClick = () => {
+        const word = document.getElementById("input1").value;
+        const term = word.charAt(0).toUpperCase()+word.toLowerCase().slice(1);
+        const data = this.props.data;
+
+
+        this.setState({
+            data: data.filter(x => {
+            if (x.professions){
+                if(x.professions.indexOf(term)>-1){
+                    return x;
+                }
+            }
+            return false;
             })
-            this.setState({inhabitants: infoInhabitants});
-          })
-          .catch(error => console.log(error));
+        })
     }
 
     render(){
 
-        const {inhabitants} = this.state;
-        console.log(inhabitants);
-
-        if(inhabitants===''){return <div className="loading">Loading</div>}
+        const data = this.state.data;
 
         return(
             <div>
@@ -50,10 +45,10 @@ class Inhabitants extends Component {
                     <div className="container">
                         <h1 className="jumbotron-heading">Find friends for new adventures</h1>
                         <p className="lead text-muted">Find friends for new adventures filtering by professions like "Metalworker, Tinker or Baker".</p>
-                        <div className="input-group mb-3">
-                            <input type="text" className="form-control" placeholder="Profession" aria-label="Recipient's username" aria-describedby="basic-addon2" />
+                        <div className="input-group mb-1">
+                            <input type="text" className="form-control" placeholder="Profession" id="input1"/>
                             <div className="input-group-append">
-                                <button className="btn btn-outline-secondary" type="button">Search</button>
+                                <button className="btn btn-outline-secondary" type="button" onClick={this.handleClick}>Search</button>
                             </div>
                         </div>
                     </div>
@@ -62,16 +57,17 @@ class Inhabitants extends Component {
                 <div className="album py-2 bg-light">
                     <div className="container">
                         <div className="row">
-                            {inhabitants.map((x,i)=>{
+                            {data.map((x,i)=>{
                                 return (
                                     <div key={i} className="col-md-3">
                                         <div className="card mb-4 box-shadow">
                                             <img className="card-img-top" src={x.thumbnail} alt="Card cap" />
                                             <div className="card-body">
-                                            <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                            <p className="card-text">{x.name}.</p>
+                                            <p className="card-text">{x.age} years.</p>
                                             <div className="d-flex justify-content-center">
                                                 <div className="btn-group">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary">View Details</button>
+                                                <Link to={{ pathname: "/inhabitantsDetails", info: { data: x } }} className="btn btn-sm btn-outline-secondary">View Details</Link>
                                                 </div>
                                             </div>
                                             </div>
@@ -87,4 +83,8 @@ class Inhabitants extends Component {
     }
 }
 
-export default Inhabitants;
+export default connect(
+    estado => ({
+        data: estado.saveReducer.data
+    })
+)(Inhabitants);

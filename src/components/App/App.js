@@ -1,10 +1,15 @@
-import React, { Component } from 'react'
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom'
+import React, { Component }                     from 'react'
+import { withRouter, Route, Switch, Redirect }  from 'react-router-dom'
+
+import { bindActionCreators }                   from 'redux';
+import { connect }                              from 'react-redux';
+import { saveAction }                          from '../../redux/actions'
 
 //components
 import './App.css'
 import Home from '../Home/Home'
 import Inhabitants from '../Inhabitants/Inhabitants'
+import InhabitantsDetails from '../InhabitantsDetails/InhabitantsDetails'
 import Footer from '../Footer/Footer'
 import Header from '../Header/Header'
 
@@ -18,6 +23,11 @@ class App extends Component {
     this.state = {
       inhabitants: []
     }
+
+    let {dispatch} = this.props;
+
+    this.onSaveData = bindActionCreators(saveAction, dispatch);
+
   }
 
   componentDidMount(){
@@ -36,7 +46,7 @@ class App extends Component {
             professions: elemt.professions
           };
         })
-        this.setState({inhabitants: infoInhabitants});
+        this.onSaveData.save(infoInhabitants);
       })
       .catch(error => console.log(error));
   }
@@ -51,7 +61,8 @@ class App extends Component {
         <Switch>
             <Route exact path="/" component={Home}/>
             <Route exact path="/inhabitants" component={Inhabitants}/>
-
+            <Route exact path="/inhabitantsDetails" component={InhabitantsDetails}/>
+ 
             <Redirect to='/' />
         </Switch>
 
@@ -62,4 +73,6 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+export default withRouter( connect()(App));
+
+
