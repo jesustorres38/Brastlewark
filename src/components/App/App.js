@@ -27,7 +27,6 @@ class App extends Component {
     let {dispatch} = this.props;
 
     this.onSaveData = bindActionCreators(saveAction, dispatch);
-
   }
 
   componentDidMount(){

@@ -1,3 +1,7 @@
 .loading{
     margin-bottom: 60vh;
 }
+
+.pagination-sm .page-item .active{
+    color: blue;
+}
